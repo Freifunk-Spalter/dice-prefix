@@ -19,6 +19,6 @@ fi
 uci commit network
 
 if uci show "/etc/config/network" > /dev/null ; then
-    echo "Everythin is Fine. But we need to restart that changes take affect!"
-    /etc/init.d/network restart
+    echo "Everythin is Fine. Reload Network!"
+    /etc/init.d/network reload
 fi
