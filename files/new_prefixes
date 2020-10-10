@@ -1,0 +1,43 @@
+#!/bin/sh
+
+function contains {
+  case $2 in  
+  *"$1"*)
+    return
+    ;;
+  esac
+  false
+}  
+
+# Get Pefixes
+sourceprefixes="$(ip -6 r s default proto babel | grep from | grep -v "/61\|/62\|63\|/64" | awk '{print $3}')"
+
+# Iterate over Prefixes
+for sourceprefix in $sourceprefixes ; do
+    alreadyassigned=false
+    subprefixes="$(sipcalc --v6split=64 $sourceprefix | grep Network | awk '{print $3}')"
+
+    ownprefixes="$(ip -6 a | grep inet6 | grep 64 | awk '{print $2}' | xargs sipcalc | grep Network | awk '{print $4}')"
+    for ownprefix in $ownprefixes ; do
+	if sipcalc $ownprefix | grep -q Global ; then
+            if contains $ownprefix "$subprefixes" ; then
+                alreadyassigned=true
+                break
+            fi
+        fi
+    done
+
+    if $alreadyassigned ; then                                                      
+        continue                                                              
+    fi    
+
+    prefixes="$(ip -6 r s | awk '{print $1}' | uniq -u | grep 64 | xargs sipcalc | grep Expanded | awk '{print $4}')"
+
+    for subprefix in $subprefixes ; do
+        if ! contains $subprefix "$prefixes" ; then 
+            echo "$(sipcalc "${subprefix}/64" | grep Compressed | awk '{print $4}')/64"
+            break
+        fi
+    done
+done
+

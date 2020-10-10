@@ -1,0 +1,24 @@
+#!/bin/sh
+
+sleep_random 100
+
+addedprefix=false
+
+for prefix in "$(new_prefixes)" ; do
+    if [[ $prefix ]] ; then
+	echo "Found not assigned Prefix for gateway ${prefix}"
+        uci add_list network.dhcp.ip6prefix=''${prefix}''
+        addedprefix=true
+    fi
+done
+
+if ! $addedprefix; then
+    exit 0
+fi
+
+uci commit network
+
+if uci show "/etc/config/network" > /dev/null ; then
+    echo "Everythin is Fine. Reloading Network"
+    /etc/init.d/network reload
+fi

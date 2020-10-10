@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# First argument is maximum sleep time 
+
+if ! [ $1 \> 0 ]; then 
+    echo "Maximum sleepingtime must be greater 0!"
+    exit 1;
+fi
+
+LENGTH=3
+randtime=$(tr -dc 0-9 </dev/urandom | head -c $LENGTH)
+
+while ! [ $randtime \> 0 ]; do
+    randtime=$(tr -dc 0-9 </dev/urandom | head -c $LENGTH)
+done
+
+sleeptime=$(($randtime % $1))
+
+echo "Sleeping for ${sleeptime}"
+sleep $sleeptime

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+removeprefix=false
+
+for prefix in "$(legacy_prefixes)" ; do
+    if [[ $prefix ]] ; then
+	echo "Found not routed prefix: ${prefix}"
+        uci del_list network.dhcp.ip6prefix=''${prefix}''
+        removeprefix=true
+    fi
+done
+
+if ! $removeprefix; then
+    exit 0
+fi
+
+uci commit network
+
+if uci show "/etc/config/network" > /dev/null ; then
+    echo "Everythin is Fine. But we need to restart that changes take affect!"
+    /etc/init.d/network restart
+fi
