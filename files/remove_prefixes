@@ -1,5 +1,7 @@
 #!/bin/sh
 
+sleep_random 100
+
 removeprefix=false
 
 for prefix in "$(legacy_prefixes)" ; do
