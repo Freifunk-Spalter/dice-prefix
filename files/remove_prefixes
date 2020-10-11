@@ -19,6 +19,8 @@ fi
 uci commit network
 
 if uci show "/etc/config/network" > /dev/null ; then
-    echo "Everythin is Fine. Reload Network!"
+    echo "Everything is Fine. Reload Network!"
     /etc/init.d/network reload
+    echo "Flush Deprecated Entries!"
+    ip -6 address flush deprecated
 fi
