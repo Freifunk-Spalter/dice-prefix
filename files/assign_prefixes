@@ -1,7 +1,5 @@
 #!/bin/sh
 
-sleep_random 100
-
 addedprefix=false
 
 for prefix in "$(new_prefixes)" ; do
