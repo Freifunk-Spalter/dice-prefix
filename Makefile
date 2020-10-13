@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=diceprefix
-PKG_VERSION:=2020-10-10
+PKG_VERSION:=2020-10-13
 PKG_RELEASE:=1
 
 PKG_MAINTAINER:=Nick Hainke <vincent@systemli.org>
@@ -18,7 +18,7 @@ define Package/diceprefix
   CATEGORY:=Utilities
   TITLE:=Dice You a Prefix of the Default Gateway Programm
   URL:=https://github.com/Freifunk-Spalter/auto-prefix-configuration-with-source-specifc-routing
-  DEPENDS:=+sipcalc
+  DEPENDS:=+sipcalc +coreutils-shuf
 endef
 
 define Package/diceprefix/description

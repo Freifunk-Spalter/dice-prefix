@@ -33,7 +33,7 @@ for sourceprefix in $sourceprefixes ; do
 
     prefixes="$(ip -6 r s | awk '{print $1}' | uniq -u | grep 64 | xargs sipcalc | grep Expanded | awk '{print $4}')"
 
-    for subprefix in $subprefixes ; do
+    for subprefix in $(shuf -e $subprefixes) ; do
         if ! contains $subprefix "$prefixes" ; then 
             echo "$(sipcalc "${subprefix}/64" | grep Compressed | awk '{print $4}')/64"
             break
