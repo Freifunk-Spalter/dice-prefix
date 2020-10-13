@@ -22,5 +22,6 @@ if uci show "/etc/config/network" > /dev/null ; then
     echo "Everything is Fine. Reload Network!"
     /etc/init.d/network reload
     echo "Flush Deprecated Entries!"
+    sleep 5
     ip -6 address flush deprecated
 fi
